@@ -25,6 +25,12 @@ class TilingKaratsubaSignals(TilingKaratsubaArchitecture):
 
         self.generate_sum_signals(content)
 
+        sum_shift_signals_comment = f"""
+-- Generate Signals for the Sum Shift"""
+        content.append(sum_shift_signals_comment)
+
+        self.generate_sum_shift_signals(content)
+
 
     def generate_input_split_signals(self, content):
         for key, _ in self._a_splits.items():
@@ -43,3 +49,7 @@ class TilingKaratsubaSignals(TilingKaratsubaArchitecture):
     def generate_sum_signals(self, content):
         for id, _ in self._sums.items():
             content.append(f"signal S{id} : unsigned({2*self._tiling_size-1} downto 0) => (others => '0');")
+
+    def generate_sum_shift_signals(self, content):
+        for id, _ in self._sums.items():
+            content.append(f"signal S{id}_shift : unsigned({2*self._mbits-1} downto 0) => (others => '0');")

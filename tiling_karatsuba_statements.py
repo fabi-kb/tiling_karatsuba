@@ -26,11 +26,19 @@ class TilingKaratsubaStatements(TilingKaratsubaArchitecture):
 
         self.generate_sum_statements(content)
 
+        final_shifts_comment = f"""
+-- Generate the final shifts"""
+        content.append(final_shifts_comment)
+
+        self.generate_final_shifts_statements(content)
+
         final_sum_comment = f"""
 -- Generate the result"""
         content.append(final_sum_comment)
 
-        self.generate_final_sum(content)
+        self.generate_final_sum_statements(content)
+
+
 
     def generate_input_split_statements(self, content):
         for key, value in self._a_splits.items():
@@ -55,9 +63,10 @@ class TilingKaratsubaStatements(TilingKaratsubaArchitecture):
             else:
                 content.append(f"S{id} <= {addend_str};")
 
-    def generate_final_sum(self, content):
-        shifted_sums = [f'S{0}']
-        for i in range(1, 2*self._num_tilings-1):
-            shifted_sums.append(f'shift_left(S{i}, {i*self._tiling_size});')
-        final_result = " + ".join(shifted_sums)
-        content.append(f"result <= {final_result};")
+    def generate_final_shifts_statements(self, content):
+        for id, _ in self._sums.items():
+            content.append(f"S{id}_shift <= shift_left(to_unsigned(0, {(2*self._mbits-1)-(2*self._tiling_size -1)}) & S{id}, {id*self._tiling_size});")
+
+    def generate_final_sum_statements(self, content):
+        final_sum = " + ".join([f"S{id}_shift" for id, _ in self._sums.items()])
+        content.append(f"result <= {final_sum};")

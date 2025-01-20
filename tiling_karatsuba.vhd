@@ -56,6 +56,15 @@ signal S4 : unsigned(15 downto 0) => (others => '0');
 signal S5 : unsigned(15 downto 0) => (others => '0');
 signal S6 : unsigned(15 downto 0) => (others => '0');
 
+-- Generate Signals for the Sum Shift
+signal S0_shift : unsigned(63 downto 0) => (others => '0');
+signal S1_shift : unsigned(63 downto 0) => (others => '0');
+signal S2_shift : unsigned(63 downto 0) => (others => '0');
+signal S3_shift : unsigned(63 downto 0) => (others => '0');
+signal S4_shift : unsigned(63 downto 0) => (others => '0');
+signal S5_shift : unsigned(63 downto 0) => (others => '0');
+signal S6_shift : unsigned(63 downto 0) => (others => '0');
+
 begin
 
 -- Split the input signals
@@ -89,7 +98,16 @@ S4 <= M13 + D22 - D11 - D33;
 S5 <= M23 - D22 - D33;
 S6 <= D33;
 
+-- Generate the final shifts
+S0_shift <= shift_left(to_unsigned(0, 48) & S0, 0);
+S1_shift <= shift_left(to_unsigned(0, 48) & S1, 8);
+S2_shift <= shift_left(to_unsigned(0, 48) & S2, 16);
+S3_shift <= shift_left(to_unsigned(0, 48) & S3, 24);
+S4_shift <= shift_left(to_unsigned(0, 48) & S4, 32);
+S5_shift <= shift_left(to_unsigned(0, 48) & S5, 40);
+S6_shift <= shift_left(to_unsigned(0, 48) & S6, 48);
+
 -- Generate the result
-result <= S0 + shift_left(S1, 8); + shift_left(S2, 16); + shift_left(S3, 24); + shift_left(S4, 32); + shift_left(S5, 40); + shift_left(S6, 48);;
+result <= S0_shift + S1_shift + S2_shift + S3_shift + S4_shift + S5_shift + S6_shift;
 
 end karatsuba_arch;
