@@ -29,9 +29,9 @@ entity karatsuba is
     );
     port (
         clk : in std_logic;
-        reset : in std_logic 
-        a : in unsigned(MBITS-1 downto 0) := (others => '0');
-        b : in unsigned(MBITS-1 downto 0) := (others => '0');
+        reset : in std_logic;
+        a : in unsigned(MBITS-1 downto 0) := (others => '1');
+        b : in unsigned(MBITS-1 downto 0) := (others => '1');
         result : out unsigned((2*MBITS)-1 downto 0) := (others => '0')
     );
 end entity karatsuba;"""

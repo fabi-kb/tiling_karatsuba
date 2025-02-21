@@ -49,14 +49,15 @@ class TilingKaratsubaStatements(TilingKaratsubaArchitecture):
 
     def generate_partial_products_statements(self, content):
         for key, values in self._diagonal_products.items():
-            content.append(f"{key} <= {values[0]} * {values[1]};")
+            content.append(f"{key} <= ('0' & {values[0]}) * ('0' & {values[1]});")
 
         for key, values in self._mixed_products.items():
-            content.append(f"{key} <= ({values[0]} + {values[1]}) * ({values[2]} + {values[3]});")
+            content.append(f"{key} <= ('0' & {values[0]} + {values[1]}) * ('0' & {values[2]} + {values[3]});")
 
     def generate_sum_statements(self, content):
         for id, addends in self._sums.items():
-            addend_str = " + ".join(addends)
+            addend_str = "'0' & "
+            addend_str += " + ".join(addends)
             if self._substractions[id]:
                 substrahend_str = " - ".join(self._substractions[id])
                 content.append(f"S{id} <= {addend_str} - {substrahend_str};")
@@ -65,7 +66,7 @@ class TilingKaratsubaStatements(TilingKaratsubaArchitecture):
 
     def generate_final_shifts_statements(self, content):
         for id, _ in self._sums.items():
-            content.append(f"S{id}_shift <= shift_left(to_unsigned(0, {(2*self._mbits-1)-(2*self._tiling_size -1)}) & S{id}, {id*self._tiling_size});")
+            content.append(f"S{id}_shift <= shift_left(to_unsigned(0, {(2*self._mbits-1)-(2*self._tiling_size -1) - 3}) & S{id}, {id*self._tiling_size});")
 
     def generate_final_sum_statements(self, content):
         final_sum = " + ".join([f"S{id}_shift" for id, _ in self._sums.items()])

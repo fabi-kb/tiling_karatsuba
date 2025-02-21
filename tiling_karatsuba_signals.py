@@ -34,22 +34,22 @@ class TilingKaratsubaSignals(TilingKaratsubaArchitecture):
 
     def generate_input_split_signals(self, content):
         for key, _ in self._a_splits.items():
-            content.append(f"signal {key} : unsigned({self._tiling_size-1} downto 0) => (others => '0');")
+            content.append(f"signal {key} : unsigned({self._tiling_size-1} downto 0) := (others => '0');")
         for key, _ in self._b_splits.items():
-            content.append(f"signal {key} : unsigned({self._tiling_size-1} downto 0) => (others => '0');")
+            content.append(f"signal {key} : unsigned({self._tiling_size-1} downto 0) := (others => '0');")
 
 
     def generate_partial_products_signals(self, content):
         for key, _ in self._diagonal_products.items():
-            content.append(f"signal {key} : unsigned({2*self._tiling_size-1} downto 0) => (others => '0');")
+            content.append(f"signal {key} : unsigned({2*self._tiling_size+1} downto 0) := (others => '0');")
         
         for key, _ in self._mixed_products.items():
-            content.append(f"signal {key} : unsigned({2*self._tiling_size-1} downto 0) => (others => '0');")
+            content.append(f"signal {key} : unsigned({2*self._tiling_size+1} downto 0) := (others => '0');")
 
     def generate_sum_signals(self, content):
         for id, _ in self._sums.items():
-            content.append(f"signal S{id} : unsigned({2*self._tiling_size-1} downto 0) => (others => '0');")
+            content.append(f"signal S{id} : unsigned({2*self._tiling_size+2} downto 0) := (others => '0');")
 
     def generate_sum_shift_signals(self, content):
         for id, _ in self._sums.items():
-            content.append(f"signal S{id}_shift : unsigned({2*self._mbits-1} downto 0) => (others => '0');")
+            content.append(f"signal S{id}_shift : unsigned({2*self._mbits-1} downto 0) := (others => '0');")
